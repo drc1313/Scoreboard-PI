@@ -1,0 +1,5 @@
+build/
+samples/
+dist/
+rgbmatrix.egg-info/
+media/
