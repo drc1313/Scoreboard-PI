@@ -1,0 +1,6 @@
+build
+dist
+rgbmatrix.egg-info
+samples
+media
+app/__pycache__
