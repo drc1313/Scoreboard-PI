@@ -295,13 +295,24 @@ async def handle_message(msg: dict):
     elif mtype == "set_names":
         if msg.get("home"): state["home_name"] = msg["home"][:8]
         if msg.get("away"): state["away_name"] = msg["away"][:8]
+
+    # --- ADD THIS NEW HANDLER ---
+    elif mtype == "set_color":
+        team = msg.get("team")       # "home" or "away"
+        color_val = msg.get("color") # "255,100,0"
         
+        # Security check: ensure team is valid and color is a string
+        if team in ["home", "away"] and isinstance(color_val, str):
+            state[f"{team}_bg_color"] = color_val
+    # ----------------------------
+
     elif mtype == "clock":
         action = msg.get("action")
         if action == "start": state["clock_running"] = True
         elif action == "stop": state["clock_running"] = False
         elif action == "set": state["clock_seconds"] = int(msg.get("seconds", 0))
 
+    # Broadcast state to all clients (optional for color, but good for consistency)
     await manager.broadcast({"type": "state", "data": state})
 
 async def clock_tick_task():
