@@ -80,10 +80,19 @@ class ScoreboardDisplay(SampleBase):
                           self.score_text_color, state["away_name"][:5])
 
         # Scores
-        graphics.DrawText(canvas, self.score_font, self.x_home, self.score_y, 
-                          self.score_text_color, str(state["home_score"]))
-        graphics.DrawText(canvas, self.score_font, self.x_away, self.score_y, 
-                          self.score_text_color, str(state["away_score"]))
+        # Center Home Score (0-31)
+        score_home_str = str(state["home_score"])[:3]
+        w_home = sum(self.score_font.CharacterWidth(ord(c)) for c in score_home_str)
+        x_home_centered = (32 - w_home) // 2
+        graphics.DrawText(canvas, self.score_font, x_home_centered, self.score_y, 
+                          self.score_text_color, score_home_str)
+
+        # Center Away Score (32-64)
+        score_away_str = str(state["away_score"])[:3]
+        w_away = sum(self.score_font.CharacterWidth(ord(c)) for c in score_away_str)
+        x_away_centered = 32 + (32 - w_away) // 2
+        graphics.DrawText(canvas, self.score_font, x_away_centered, self.score_y, 
+                          self.score_text_color, score_away_str)
 
         # Divider Line
         graphics.DrawLine(canvas, 0, 12, 63, 12, graphics.Color(100, 100, 100))
